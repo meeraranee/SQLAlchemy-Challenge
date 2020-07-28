@@ -56,7 +56,7 @@ def precipitation():
     session.close()
     
     precip_info = []
-    for result in results:
+    for date, prcp in results:
         row = {}
         row['date'] = date
         row['prcp'] = prcp
@@ -90,12 +90,13 @@ def tobs():
 
     return jsonify(tobs_results)
 
+# Edit this, values showing up as null
 @app.route("/api/v1.0/<start>")
 def starting(start):
     session = Session(engine)
     results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.min(Measurement.tobs)).\
         filter(Measurement.date >= start).all()
-    
+
     session.close()
 
     start_info = []
@@ -109,6 +110,7 @@ def starting(start):
 
     return jsonify(start_info)
 
+# Edit this, values showing up as null
 @app.route("/api/v1.0/<start>/<end>")
 def start_end(start, end):
     session = Session(engine)
